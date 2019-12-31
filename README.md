@@ -193,7 +193,8 @@ After=sys-subsystem-net-devices-ib0.device
 
 [Service]
 Type=oneshot
-ExecStart=/root/40g/setup_ib0.sh
+ExecStart=/bin/echo connected > /sys/class/net/ib0/mode
+ExecStart=/sbin/ifconfig ib0 mtu 65520
 ```
 
 ### Run iperf3 with larger number of threads (software bottleneck in iperf3)
