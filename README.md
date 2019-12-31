@@ -79,35 +79,6 @@ Connecting to host 10.30.0.1, port 5201
 iperf Done.
 ```
 
-## PCI-Express speeds
-PCI-E version | Per lane GT/sec | Per lane MBytes/sec
-------------------- | ------------- | -------------------
-1.x | 2.5 GT/sec | 250 MBytes/sec
-2.x | 5 GT/sec | 500 MBytes/sec
-3.x | 8 GT/sec | 985 MBytes/sec
-4.x | 16 GT/sec | 1.97 GBytes/sec
-
-PCI-E Version | Per lane GT/sec | Physical | Logical | Bandwidth MBytes/sec
-------------- | --------------- | -------- | ------- | --------------------
-2.x | 5 GT/sec | x8 | x1 | 250 MBytes/sec
-2.x | 5 GT/sec | x8 | x4 | 1 GBytes/sec
-2.x | 5 GT/sec | x8 | x8 | 2 GBytes/sec
-2.x | 5 GT/sec | x16 | x1 | 250 MBytes/sec
-2.x | 5 GT/sec | x16 | x4 | 1 GBytes/sec
-2.x | 5 GT/sec | x16 | x8 | 2 GBytes/sec
-3.x | 8 GT/sec | x8 | x1 | 985 MBytes/sec
-3.x | 8 GT/sec | x8 | x4 | 3.94 GBytes/sec
-3.x | 8 GT/sec | x8 | x8 | 7.88 GBytes/sec
-3.x | 8 GT/sec | x16 | x1 | 985 MBytes/sec
-3.x | 8 GT/sec | x16 | x4 | 3.94 GBytes/sec
-3.x | 8 GT/sec | x16 | x8 | 7.88 GBytes/sec
-
-Notes:
-- Physical width will never be **smaller** than physical width of PCI-Express device (x8 in this case)
-- Logical width will never be **larger** than physical width
-- Logical width will never be **larger** than actual width of PCI-Express device lane width (x8 in this case)
-
-
 ## Troubleshooting and improving performance
 ### Identify your card
 ```lspci | grep Mellanox```
@@ -152,8 +123,81 @@ Output will look like:
 - **Width x8** : indicates logical width is x8 (8 lanes)
 
 
-### PCI-Express version, slot size and configuration
+## PCI-Express speeds and maximum possible bandwidth for network link
+PCI-E version | Per lane GT/sec | Per lane MBytes/sec
+------------------- | ------------- | -------------------
+1.x | 2.5 GT/sec | 250 MBytes/sec
+2.x | 5 GT/sec | 500 MBytes/sec
+3.x | 8 GT/sec | 985 MBytes/sec
+4.x | 16 GT/sec | 1.97 GBytes/sec
 
+PCI-E Version | Per lane GT/sec | Physical | Logical | Bandwidth MBytes/sec
+------------- | --------------- | -------- | ------- | --------------------
+2.x | 5 GT/sec | x8 | x1 | 250 MBytes/sec
+2.x | 5 GT/sec | x8 | x4 | 1 GBytes/sec
+2.x | 5 GT/sec | x8 | x8 | 2 GBytes/sec
+2.x | 5 GT/sec | x16 | x1 | 250 MBytes/sec
+2.x | 5 GT/sec | x16 | x4 | 1 GBytes/sec
+2.x | 5 GT/sec | x16 | x8 | 2 GBytes/sec
+3.x | 8 GT/sec | x8 | x1 | 985 MBytes/sec
+3.x | 8 GT/sec | x8 | x4 | 3.94 GBytes/sec
+3.x | 8 GT/sec | x8 | x8 | 7.88 GBytes/sec
+3.x | 8 GT/sec | x16 | x1 | 985 MBytes/sec
+3.x | 8 GT/sec | x16 | x4 | 3.94 GBytes/sec
+3.x | 8 GT/sec | x16 | x8 | 7.88 GBytes/sec
+
+Notes:
+- Physical width will never be **smaller** than physical width of PCI-Express device (x8 in this case)
+- Logical width will never be **larger** than physical width
+- Logical width will never be **larger** than actual width of PCI-Express device lane width (x8 in this case)
+
+### Limiting factors for maximum bandwidth of network link
+- PCI-Express version
+- Logical slot width - may depend on configurable settings in the BIOS for your motherboard
+- Maximum bandwidth for network link will be **LESSER** of maximum bandwidth for each of the connected machines as explored above
+
+### sysctl settings for TCP/IP stack
+Put ```etc/sysctl.d/60-infiniband.conf``` under ```/etc/sysctl.d``` and reboot
+
+Contents of ```etc/sysctl.d/60-infiniband.conf```
+
+```
+# For Mellanox MT27500 ConnextX-3 (HP InfiniBand FDR/EN 10/40Gb Dual Port 544QSFP)
+# Settings from https://furneaux.ca/wiki/IPoIB#Kernel_Tuning
+# Originally settings from Mellanox:
+#   https://community.mellanox.com/s/article/linux-sysctl-tuning
+net.ipv4.tcp_timestamps=0
+net.ipv4.tcp_sack=1
+net.core.netdev_max_backlog=250000
+net.core.rmem_max=4194304
+net.core.wmem_max=4194304
+net.core.rmem_default=4194304
+net.core.wmem_default=4194304
+net.core.optmem_max=4194304
+net.ipv4.tcp_low_latency=1
+net.ipv4.tcp_adv_win_scale=1
+net.ipv4.tcp_rmem=4096 87380 4194304
+net.ipv4.tcp_wmem=4096 65536 4194304
+```
+
+### interface connected state and MTU
+- Put ```etc/systemd/system/setup_ib0.service``` under ```etc/systemd/system/```
+- Run ```systemctl enable setup_ib0.service``` and reboot
+Contents of ```etc/systemd/system/setup_ib0.service```
+
+```
+[Unit]
+Description=Setup ib0
+After=sys-subsystem-net-devices-ib0.device
+
+[Service]
+Type=oneshot
+ExecStart=/root/40g/setup_ib0.sh
+```
+
+### IP over Infiniband limitations
+- Number and power of CPUs
+- Available RAM
 
 
 # Background
