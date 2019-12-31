@@ -202,15 +202,17 @@ ExecStart=/root/40g/setup_ib0.sh
 
 On each side, try ```-P2```, ```-P4``` and ```-P8``` to see what extracts the maximum bandwidth from the link. For me I got the maximum with ```-P4```.
 
-# Questions and Answers
-## Why can't I see the full 56 GBit/sec or 60 GBit/sec bandwidth?
+## Questions and Answers
+### Why can't I see the full 56 GBit/sec or 60 GBit/sec bandwidth?
 - IP over Infiniband limitations
 - Number and power of CPUs
 - Available RAM
 - Limitations of the measurement tool (``iperf3```)
 
-## Both my Mellanox cards have TWO 40 GBit ports, canI bond them?
-No.
+### Both my Mellanox cards have TWO 40 GBit ports, can I bond them to get double the bandwidth?
+No - Linux kernel bonding only supports Level 1 protocols, and Infiniband is not a Level 1 protocol.
+
+You are also limited by the maximum bandwidth supported by your PCI-Express slot.
 
 
 # Background
