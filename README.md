@@ -80,13 +80,31 @@ iperf Done.
 ```
 
 ## PCI-Express speeds
-PCI Express version | Per lane GT/sec | Per lane MBytes/sec
+PCI-E version | Per lane GT/sec | Per lane MBytes/sec
 ------------------- | ------------- | -------------------
 1.x | 2.5 GT/sec | 250 MBytes/sec
 2.x | 5 GT/sec | 500 MBytes/sec
 3.x | 8 GT/sec | 985 MBytes/sec
 4.x | 16 GT/sec | 1.97 GBytes/sec
 
+PCI-E Version | Per lane GT/sec | Physical | Logical | Bandwidth MBytes/sec
+------------- | --------------- | -------- | ------- | --------------------
+2.x | 5 GT/sec | x8 | x1 | 250 MBytes/sec
+2.x | 5 GT/sec | x8 | x4 | 1 GBytes/sec
+2.x | 5 GT/sec | x8 | x8 | 2 GBytes/sec
+2.x | 5 GT/sec | x16 | x1 | 250 MBytes/sec
+2.x | 5 GT/sec | x16 | x4 | 1 GBytes/sec
+2.x | 5 GT/sec | x16 | x8 | 2 GBytes/sec
+3.x | 8 GT/sec | x8 | x1 | 985 MBytes/sec
+3.x | 8 GT/sec | x8 | x4 | 3.94 GBytes/sec
+3.x | 8 GT/sec | x8 | x8 | 7.88 GBytes/sec
+3.x | 8 GT/sec | x16 | x1 | 985 MBytes/sec
+3.x | 8 GT/sec | x16 | x4 | 3.94 GBytes/sec
+3.x | 8 GT/sec | x16 | x8 | 7.88 GBytes/sec
+
+Notes:
+- Logical width will never be larger than physical width
+- Logical width will never be larger than actual width of PCI-Express device lane width (x8 in this case)
 
 
 ## Troubleshooting and improving performance
