@@ -211,7 +211,7 @@ On each machine start iperf3 (in server and client modes respectively) adding th
 - IP over Infiniband limitations
 - Number and power of CPUs
 - Available RAM
-- Limitations of the measurement tool (``iperf3```)
+- Limitations of the measurement tool (```iperf3```)
 
 ### Both my Mellanox cards have TWO 40 GBit ports, can I bond them to get double the bandwidth?
 No - Linux kernel bonding only supports Level 1 protocols, and Infiniband is not a Level 1 protocol.
