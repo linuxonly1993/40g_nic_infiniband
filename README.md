@@ -103,8 +103,9 @@ PCI-E Version | Per lane GT/sec | Physical | Logical | Bandwidth MBytes/sec
 3.x | 8 GT/sec | x16 | x8 | 7.88 GBytes/sec
 
 Notes:
-- Logical width will never be larger than physical width
-- Logical width will never be larger than actual width of PCI-Express device lane width (x8 in this case)
+- Physical width will never be **smaller** than physical width of PCI-Express device (x8 in this case)
+- Logical width will never be **larger** than physical width
+- Logical width will never be **larger** than actual width of PCI-Express device lane width (x8 in this case)
 
 
 ## Troubleshooting and improving performance
