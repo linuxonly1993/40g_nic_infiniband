@@ -108,6 +108,45 @@ Notes:
 
 
 ## Troubleshooting and improving performance
+### Identify your card
+```lspci | grep Mellanox```
+Output will look like
+```
+81:00.0 Network controller: Mellanox Technologies MT27500 Family [ConnectX-3]
+```
+**```81:00.0```** is *domain-bus-device* number
+**MT27500** is Mellanox part number
+**ConnectX-3** indicates it is PCI-Express 3 - actual PCI-Express version also depends on PCI-Express capabilities of your motherboard
+
+### Get additional details on your card
+Use *domain-bus-device* number obtained above
+
+```lspci -v -s 81:00.0```
+Output will look like:
+```
+81:00.0 Network controller: Mellanox Technologies MT27500 Family [ConnectX-3]
+	Subsystem: Hewlett-Packard Company InfiniBand FDR/EN 10/40Gb Dual Port 544QSFP Adapter
+	Physical Slot: 5
+	Flags: bus master, fast devsel, latency 0, IRQ 47, NUMA node 1
+	Memory at ec100000 (64-bit, non-prefetchable) [size=1M]
+	Memory at 3800fe000000 (64-bit, prefetchable) [size=32M]
+	Expansion ROM at ec000000 [disabled] [size=1M]
+	Capabilities: <access denied>
+	Kernel driver in use: mlx4_core
+	Kernel modules: mlx4_core
+```
+***Subsystem: Hewlett-Packard Company InfiniBand FDR/EN 10/40Gb Dual Port 544QSFP Adapter*** gives further OEM details
+
+### Get current PCI-Express version and width used
+Use *domain-bus-device* number obtained above
+
+```sudo lspci -vv -s 81:00.0 | grep LnkSta:```
+
+Output will look like:
+```		LnkSta:	Speed 8GT/s, Width x8, TrErr- Train- SlotClk+ DLActive- BWMgmt- ABWMgmt-```
+**Speed 8GT/s** : 8 GT/s indicates PCI-Express version 3.x
+**Width x8** : indicates logical width is x8 (8 lanes)
+
 
 ### PCI-Express version, slot size and configuration
 
