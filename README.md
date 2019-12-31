@@ -56,8 +56,7 @@ Dec 30 00:07:32 fili OpenSM[3107]: Exiting SM
 Dec 30 00:07:32 fili OpenSM[3110]: Entering STANDBY state
 ```
 
-## Improving performance
-### Checking performance
+## Checking performance
 - On both machines, A and B connected by 40Gbit Infiniband cable, having IP addresses IP_A and IP_B on interface ```ib0```respectively, install iperf3: ```sudo apt install iperf3```
 - On machine A start iperf3 in **server** mode: ```iperf3 -B IP_A -i 3 -s``` - replace IP_A with IP address of interface ```ib0``` on Machine A (sudo / root **not** required)
 - On machine B start iperf3 in **client** mode: ```iperf3 -B IP_B -i 3 -t 15 -s IP_A``` - replace IP_A with IP address of interface ```ib0``` on Machine A and replace IP_B with IP address of interface ```ib0``` on machine B (sudo / root **not** required)
@@ -79,6 +78,22 @@ Connecting to host 10.30.0.1, port 5201
 
 iperf Done.
 ```
+
+## PCI-Express speeds
+PCI Express version | Per lane GT/sec | Per lane MBytes/sec
+------------------- | ------------- | -------------------
+1.x | 2.5 GT/sec | 250 MBytes/sec
+2.x | 5 GT/sec | 500 MBytes/sec
+3.x | 8 GT/sec | 985 MBytes/sec
+4.x | 16 GT/sec | 1.97 GBytes/sec
+
+
+
+## Troubleshooting and improving performance
+
+### PCI-Express version, slot size and configuration
+
+
 
 # Background
 
