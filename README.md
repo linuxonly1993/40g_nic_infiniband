@@ -196,9 +196,21 @@ Type=oneshot
 ExecStart=/root/40g/setup_ib0.sh
 ```
 
-### IP over Infiniband limitations
+### Run iperf3 with larger number of threads (software bottleneck in iperf3)
+- On machine A start iperf3 in **server** mode: ```iperf3 -B IP_A -i 3 -P2 -s``` - replace IP_A with IP address of interface ```ib0``` on Machine A (sudo / root **not** required)
+- On machine B start iperf3 in **client** mode: ```iperf3 -B IP_B -i 3 -t 15 -P2 -s IP_A``` - replace IP_A with IP address of interface ```ib0``` on Machine A and replace IP_B with IP address of interface ```ib0``` on machine B (sudo / root **not** required)
+
+On each side, try ```-P2```, ```-P4``` and ```-P8``` to see what extracts the maximum bandwidth from the link. For me I got the maximum with ```-P4```.
+
+# Questions and Answers
+## Why can't I see the full 56 GBit/sec or 60 GBit/sec bandwidth?
+- IP over Infiniband limitations
 - Number and power of CPUs
 - Available RAM
+- Limitations of the measurement tool (``iperf3```)
+
+## Both my Mellanox cards have TWO 40 GBit ports, canI bond them?
+No.
 
 
 # Background
