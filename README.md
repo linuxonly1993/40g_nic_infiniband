@@ -123,7 +123,7 @@ Output will look like:
 - **Width x8** : indicates logical width is x8 (8 lanes)
 
 
-## PCI-Express speeds and maximum possible bandwidth for network link
+### PCI-Express speeds and maximum possible bandwidth for network link
 PCI-E version | Per lane GT/sec | Per lane MBytes/sec
 ------------------- | ------------- | -------------------
 1.x | 2.5 GT/sec | 250 MBytes/sec
