@@ -157,7 +157,7 @@ Notes:
 - Maximum bandwidth for network link will be **LESSER** of maximum bandwidth for each of the connected machines as explored above
 
 ### sysctl settings for TCP/IP stack
-Put ```etc/sysctl.d/60-infiniband.conf``` under ```/etc/sysctl.d``` and reboot
+Put ```etc/sysctl.d/60-infiniband.conf``` under ```/etc/sysctl.d``` and **reboot**
 
 Contents of ```etc/sysctl.d/60-infiniband.conf```
 
@@ -182,7 +182,7 @@ net.ipv4.tcp_wmem=4096 65536 4194304
 
 ### interface connected state and MTU
 - Put ```etc/systemd/system/setup_ib0.service``` under ```etc/systemd/system/```
-- Run ```systemctl enable setup_ib0.service``` and reboot
+- Run ```systemctl enable setup_ib0.service``` and **reboot**
 
 Contents of ```etc/systemd/system/setup_ib0.service```
 
