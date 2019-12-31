@@ -110,6 +110,7 @@ Notes:
 ## Troubleshooting and improving performance
 ### Identify your card
 ```lspci | grep Mellanox```
+
 Output will look like
 ```
 81:00.0 Network controller: Mellanox Technologies MT27500 Family [ConnectX-3]
@@ -122,6 +123,7 @@ Output will look like
 Use *domain-bus-device* number obtained above
 
 ```lspci -v -s 81:00.0```
+
 Output will look like:
 ```
 81:00.0 Network controller: Mellanox Technologies MT27500 Family [ConnectX-3]
@@ -143,6 +145,7 @@ Use *domain-bus-device* number obtained above
 ```sudo lspci -vv -s 81:00.0 | grep LnkSta:```
 
 Output will look like:
+
 ```		LnkSta:	Speed 8GT/s, Width x8, TrErr- Train- SlotClk+ DLActive- BWMgmt- ABWMgmt-```
 - **Speed 8GT/s** : 8 GT/s indicates PCI-Express version 3.x is being currently used for that slot
 - **Width x8** : indicates logical width is x8 (8 lanes)
