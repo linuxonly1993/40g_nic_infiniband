@@ -203,6 +203,9 @@ ExecStart=/sbin/ifconfig ib0 mtu 65520
 
 On each side, try ```-P2```, ```-P4``` and ```-P8``` to see what extracts the maximum bandwidth from the link. For me I got the maximum with ```-P4```.
 
+### Run multiple instances of iperf3
+On each machine start iperf3 (in server and client modes respectively) adding the **```-p <port_num>```** option to choose a port different from the iperf3 default **5201**
+
 ## Questions and Answers
 ### Why can't I see the full 56 GBit/sec or 60 GBit/sec bandwidth?
 - IP over Infiniband limitations
