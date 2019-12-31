@@ -1,0 +1,8 @@
+[Unit]
+Description=Setup ib0
+After=sys-subsystem-net-devices-ib0.device
+
+[Service]
+Type=oneshot
+ExecStart=/bin/echo connected > /sys/class/net/ib0/mode
+ExecStart=/sbin/ifconfig ib0 mtu 65520
