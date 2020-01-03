@@ -1,5 +1,53 @@
 # Using 40G Mellanox Infiniband single- or dual-port NICs
 
+Table of Contents
+=================
+
+* [Operating environment](#operating-environment)
+* [Should I use Infiniband mode or Ethernet mode?](#should-i-use-infiniband-mode-or-ethernet-mode)
+   * [Advantages of Infiniband](#advantages-of-infiniband)
+   * [Disadvantages of Infiniband](#disadvantages-of-infiniband)
+   * [Advantages of Ethernet mode](#advantages-of-ethernet-mode)
+* [Using both ports of a dual-port VPI NIC - what do I get?](#using-both-ports-of-a-dual-port-vpi-nic---what-do-i-get)
+* [Quick start - Ethernet mode](#quick-start---ethernet-mode)
+  * [Package installation](#package-installation)
+  * [Put your ports in Ethernet mode](#put-your-ports-in-ethernet-mode)
+  * [Set persistent interface names](#set-persistent-interface-names)
+  * [Using a pair of SINGLE port Mellanox VPI 40Gbit NICs](#using-a-pair-of-single-port-mellanox-vpi-40gbit-nics)
+     * [Setup interface](#setup-interface)
+     * [Bring up interface](#bring-up-interface)
+  * [Using both ports of a pair of Mellanox VPI 40Gbit NIC](#using-both-ports-of-a-pair-of-mellanox-vpi-40gbit-nic)
+     * [Enable bonding](#enable-bonding)
+     * [Setup interfaces](#setup-interfaces)
+     * [Bring up interfaces](#bring-up-interfaces)
+     * [Check bonding status](#check-bonding-status)
+* [Quick Start - Infiniband mode](#quick-start---infiniband-mode)
+  * [Package installation](#package-installation-1)
+  * [Setup interface](#setup-interface-1)
+  * [Connect cable between computers](#connect-cable-between-computers)
+  * [Reboot](#reboot)
+* [Troubleshooting steps](#troubleshooting-steps)
+* [Checking performance](#checking-performance)
+* [Troubleshooting and improving performance](#troubleshooting-and-improving-performance)
+  * [Identify your card](#identify-your-card)
+  * [Get additional details on your card](#get-additional-details-on-your-card)
+  * [Get current PCI-Express version and width used](#get-current-pci-express-version-and-width-used)
+  * [PCI-Express speeds and maximum possible bandwidth for network link](#pci-express-speeds-and-maximum-possible-bandwidth-for-network-link)
+  * [Limiting factors for maximum bandwidth of network link](#limiting-factors-for-maximum-bandwidth-of-network-link)
+  * [sysctl settings for TCP/IP stack](#sysctl-settings-for-tcpip-stack)
+  * [Interface connected state and MTU](#interface-connected-state-and-mtu)
+  * [Run iperf3 with larger number of threads (software bottleneck in iperf3)](#run-iperf3-with-larger-number-of-threads-software-bottleneck-in-iperf3)
+  * [Run multiple instances of iperf3](#run-multiple-instances-of-iperf3)
+* [Background](#background)
+* [Links](#links)
+* [Buying Links](#buying-links)
+
+ToC created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
+
+
+
+
+
 ## Operating environment
 - Ubuntu Bionic 18.04.3
 - Vanilla upstream kernel 5.4.3 from kernel.org (no additional patches applied)
