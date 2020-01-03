@@ -1,8 +1,145 @@
-# Leveraging economical 40G Mellanox Infiniband NIC
+# Using 40G Mellanox Infiniband single- or dual-port NICs
 
 ## Operating environment
 - Ubuntu Bionic 18.04.3
 - Vanilla upstream kernel 5.4.3 from kernel.org (no additional patches applied)
+
+## Should I use Infiniband mode or Ethernet mode?
+### Advantages of Infiniband
+- Lower latency
+- Can use for low-latency, high-bandwidth storage links, using iSCSI
+- Can additionally use RDMA (remote DMA) for things like NFS
+- If you do not have a VPI NIC, you probably cannot put the port in Ethernet mode anyway
+
+### Disadvantages of Infiniband
+- Requires additional packages to be installed - opensm, rdma-core
+- I have not explored using both ports of a Dual-Port 40GBit/sec ConnectX-3 VPI Mellanox NIC card in Infiniband mode - though it is possible
+
+### Advantages of Ethernet mode
+- Does not require installing the ```opensm``` and ```rdma-core``` packages and running the ```opensm``` server
+- Installation and configuration steps are simpler and more familiar
+- Renaming the interface names is easier / more familiar to experienced Linux users
+
+## Using both ports of a dual-port VPI NIC - what do I get?
+**WITHOUT** using bonding, you can ONLY have two independent network links - e.g. MachineA <---> MachineB and MachineA <---> MachineC simultaneously.
+
+Using bonding, you can ONLY get **balanced round-robin mode** - this means:
+- You do **NOT** get double the bandwidth on the bonded link
+- You get RESILIENCE from:
+    - Failure of one network cable / transceiver
+    - A single network cable being disconnected on one or both ends
+    - A single port failure on any one machine
+    - Failure of a single port on both machines at either end of a single network cable
+
+# Quick start - Ethernet mode
+## Package installation
+```apt install mstflint infiniband-diags```
+You do not need ```rdma-core``` or ```opensm```
+
+## Put your ports in Ethernet mode
+```sudo mstconfig query```
+
+Output will look like:
+
+```
+Device #1:
+----------
+
+Device type:    ConnectX3       
+PCI device:     /sys/bus/pci/devices/0000:05:00.0/config
+
+Configurations:                              Next Boot
+         SRIOV_EN                            True(1)         
+         NUM_OF_VFS                          16              
+         LINK_TYPE_P1                        ETH(2)          
+         LINK_TYPE_P2                        VPI(3)          
+         LOG_BAR_SIZE                        5               
+         BOOT_PKEY_P1                        0               
+         BOOT_PKEY_P2                        0               
+         BOOT_OPTION_ROM_EN_P1               True(1)         
+         BOOT_VLAN_EN_P1                     False(0)        
+         BOOT_RETRY_CNT_P1                   0               
+         LEGACY_BOOT_PROTOCOL_P1             PXE(1)          
+         BOOT_VLAN_P1                        0               
+         BOOT_OPTION_ROM_EN_P2               True(1)         
+         BOOT_VLAN_EN_P2                     False(0)        
+         BOOT_RETRY_CNT_P2                   0               
+         LEGACY_BOOT_PROTOCOL_P2             PXE(1)          
+         BOOT_VLAN_P2                        0               
+         IP_VER_P1                           IPv4(0)         
+         IP_VER_P2                           IPv4(0)         
+         CQ_TIMESTAMP                        True(1)         
+```
+
+```PCI device:     ```/sys/bus/pci/devices/**```0000:05:00.0```**/config : Device name to use with ```mstconfig``` is in **bold**```
+
+**```Device type:    ConnectX3```** : ConnectX3 says it is a PCI-Express 3.x capable card
+
+**```LINK_TYPE_P1                        VPI(3)```** : Says Port 1 is in VPI (Auto) mode
+**```LINK_TYPE_P2                        ETH(2)```** : Says Port 2 is in Ethernet mode
+
+On a VPI-capable card, port type can be any of:
+- 1 : Infiniband
+- 2 : Ethernet
+- 3 : VPI (Auto)
+
+### Put Port1 in Ethernet mode
+```mstconfig -d 0000:05:00.0 set LINK_TYPE_P1=2```
+
+### Put Port2 in Ethernet mode
+```mstconfig -d 0000:05:00.0 set LINK_TYPE_P2=2```
+
+**Reboot** - mstconfig port type settings will only take effect after a reboot.
+
+### Set persistent interface names
+After reboot, (even without connecting the cables), you should see two new interfaces listed by ```ifconfig``` command. For example:
+
+```ifconfig```
+
+Output should look like:
+
+```
+ens5p1: flags=4098<BROADCAST,MULTICAST>  mtu 1500
+        ether 00:02:c9:3e:ca:b0  txqueuelen 10000  (Ethernet)
+        RX packets 2142  bytes 248089 (248.0 KB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 6121  bytes 5923956 (5.9 MB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+        
+ens5: flags=4098<BROADCAST,MULTICAST>  mtu 1500
+        ether 00:02:c9:3e:ca:b1  txqueuelen 10000  (Ethernet)
+        RX packets 2142  bytes 248089 (248.0 KB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 6121  bytes 5923956 (5.9 MB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+```
+
+The ```ens5``` and ```ens5p1``` interface names may be different
+
+Edit ```/etc/udev/rules.d/70-persistent-net.rules``` and add the following lines
+
+```
+# Mellanox ConnectX-3 HP 649281-B21 IB FDR/EN 10/40Gb 2P 544QSFP Adapter 656089-001
+SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="00:02:c9:3e:ca:b1", ATTR{dev_id}=="0x0", ATTR{type}=="1", NAME="eth40a"
+
+# Mellanox ConnectX-3 HP 649281-B21 IB FDR/EN 10/40Gb 2P 544QSFP Adapter 656089-001
+SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="00:02:c9:3e:ca:b0", ATTR{dev_id}=="0x0", ATTR{type}=="1", NAME="eth40b"
+```
+
+**IMPORTANT**: Change the **```ATTR{address}=="00:02:c9:3e:ca:b1"```** and **```ATTR{address}=="00:02:c9:3e:ca:b0"```** to reflect your actual MAC addresses. Leave the names as **```eth40a```** and **```eth40b```**.
+
+**Reboot again** to let the persistent names take effect.
+
+## Using a pair of SINGLE port Mellanox VPI 40Gbit NICs
+![Connectivity Diagram](https://github.com/linuxonly1993/40g_nic_infiniband/raw/master/SinglePort_Ethernet_Link.png)
+
+If you have a single-port 40GBit/sec NIC or have only a single cable, you can only use one port on each end (at least at a time). So in such cases, bonding does not make sense.
+
+## Using both ports of a pair of Mellanox VPI 40Gbit NIC
+![Connectivity Diagram](https://github.com/linuxonly1993/40g_nic_infiniband/raw/master/DualPort_Ethernet_Link.png)
+
+
+s
 
 ## Quick Start
 Do the following steps on **BOTH** machines connected by 40Gbit Infiniband cable.
@@ -217,9 +354,6 @@ On each machine start iperf3 (in server and client modes respectively) adding th
 No - Linux kernel bonding only supports Level 1 protocols, and Infiniband is not a Level 1 protocol.
 
 You are also limited by the maximum bandwidth supported by your PCI-Express slot.
-
-# Using both ports of a pair of Mellanox VPI 40Gbit NIC
-![Connectivity Diagram](https://github.com/linuxonly1993/40g_nic_infiniband/blob/master/DualPort_Ethernet_Link.png)
 
 # Background
 
