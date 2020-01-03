@@ -32,6 +32,8 @@ Using bonding, you can ONLY get **balanced round-robin mode** - this means:
     - Failure of a single port on both machines at either end of a single network cable
 
 # Quick start - Ethernet mode
+Folliwng steps need to be done on **BOTH**machines
+
 ## Package installation
 ```apt install mstflint infiniband-diags```
 You do not need ```rdma-core``` or ```opensm```
@@ -128,6 +130,8 @@ SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="00:02:c9:3e:ca:b
 
 **IMPORTANT**: Change the **```ATTR{address}=="00:02:c9:3e:ca:b1"```** and **```ATTR{address}=="00:02:c9:3e:ca:b0"```** to reflect your actual MAC addresses. Leave the names as **```eth40a```** and **```eth40b```**.
 
+If you have only one port, you will only add one (uncommented) line (```eth40a```)
+
 **Reboot again** to let the persistent names take effect.
 
 ## Using a pair of SINGLE port Mellanox VPI 40Gbit NICs
@@ -135,13 +139,101 @@ SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="00:02:c9:3e:ca:b
 
 If you have a single-port 40GBit/sec NIC or have only a single cable, you can only use one port on each end (at least at a time). So in such cases, bonding does not make sense.
 
+### Setup interface
+Edit ```/etc/network/interfaces/eth40a``` to contain:
+
+```
+allow-hotplug eth40a
+iface eth40g inet static
+    hwaddress 00:02:c9:3e:ca:b0
+    address 10.30.0.2
+    netmask 255.255.255.0
+    broadcast 10.30.0.255
+```
+
+Replace **10.30.0.2** with static IP address of MachineA and MachineB respectively.
+Replace **netmask 255.255.255.0** and **broadcast 10.30.0.255** based on your IP addresses
+
+### Bring up interface
+```ifdown eth40a; ifup eth40a```
+
 ## Using both ports of a pair of Mellanox VPI 40Gbit NIC
 ![Connectivity Diagram](https://github.com/linuxonly1993/40g_nic_infiniband/raw/master/DualPort_Ethernet_Link.png)
 
+### Enable bonding
+- Add ```bonding``` to ```/etc/modules``` - load ```bonding``` module on reboot
+- ```modprobe bonding``` - until next reboot
 
-s
+### Setup interfaces
+Edit ```/etc/network/interfaces/bond0``` to contain:
 
-## Quick Start
+```
+allow-hotplug eth40a
+iface eth40a inet manual
+    bond-mode active-backup
+    bond-master bond0
+    pre-up ifconfig eth40a txqueuelen 10000 2>/dev/null || true
+
+allow-hotplug eth40b
+iface eth40b inet manual
+    bond-mode active-backup
+    bond-master bond0
+    pre-up ifconfig eth40b txqueuelen 10000 2>/dev/null || true
+
+allow-hotplug bond0
+iface bond0 inet static
+    bond-mode balance-rr
+    use_carrier 1
+    bond-slaves eth40a eth40b
+    bond-miimon 100
+    bond-downdelay 200
+    bond-updelay 200
+ 	address 10.30.0.2
+ 	netmask 255.255.0.0
+	broadcast 10.30.255.255
+    pre-down ifconfig eth40a down 2>/dev/null || true
+    pre-down ifconfig eth40b down 2>/dev/null || true
+    pre-up ifconfig eth40a up 2>/dev/null || true
+    pre-up ifconfig eth40b up 2>/dev/null || true
+
+```
+
+Note that IP address, netmask and broadcast address are **ONLY** associated with the ```bond0``` address.
+
+### Bring up interfaces
+```
+ifdown bond0 2</dev/null
+ifdown eth40a 2>/dev/null
+ifdown eth40b 2>/dev/null
+ifup bond0 &
+ifup eth40a; ifup eth40b
+```
+
+### Check bonding status
+```cat /proc/net/bonding/bond0```
+
+Output should look like:
+
+```
+Ethernet Channel Bonding Driver: v3.7.1 (April 27, 2011)
+
+Bonding Mode: load balancing (round-robin)
+MII Status: up
+MII Polling Interval (ms): 100
+Up Delay (ms): 200
+Down Delay (ms): 200
+Peer Notification Delay (ms): 0
+
+Slave Interface: eth40b
+MII Status: up
+Speed: 40000 Mbps
+Duplex: full
+Link Failure Count: 0
+Permanent HW addr: 00:02:c9:3e:ca:b0
+Slave queue ID: 0
+```
+
+## Quick Start - Infiniband mode
 Do the following steps on **BOTH** machines connected by 40Gbit Infiniband cable.
 
 ### Package installation
