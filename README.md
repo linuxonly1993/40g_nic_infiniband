@@ -218,6 +218,8 @@ No - Linux kernel bonding only supports Level 1 protocols, and Infiniband is not
 
 You are also limited by the maximum bandwidth supported by your PCI-Express slot.
 
+# Using both ports of a pair of Mellanox VPI 40Gbit NIC
+![Connectivity Diagram](DualPort_Ethernet_Link.png)
 
 # Background
 
