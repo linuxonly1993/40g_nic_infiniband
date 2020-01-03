@@ -16,6 +16,8 @@ Table of Contents
 * [Troubleshooting steps](#troubleshooting-steps)
 * [Checking performance](#checking-performance)
 * [Troubleshooting and improving performance](#troubleshooting-and-improving-performance)
+* [Links](#links)
+* [Search and buying links](#search-and-buying-links)
 
 ToC created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 
@@ -459,3 +461,36 @@ On each side, try ```-P2```, ```-P4``` and ```-P8``` to see what extracts the ma
 
 ## Run multiple instances of iperf3
 On each machine start iperf3 (in server and client modes respectively) adding the **```-p <port_num>```** option to choose a port different from the iperf3 default **5201**
+
+# Links
+1. [HP Mellanox ConnectX Adapters Reference Guide](https://www.mellanox.com/pdf/products/oem/HP-Mellanox-Reference-Guide-August-2012.pdf)
+2. [Mellanox ConnectX-3 VPI Single and Dual QSFP+ Port Adapter Card User Manual](https://www.mellanox.com/related-docs/user_manuals/ConnectX-3%20VPI_Single_and_Dual_QSFP+_Port_Adapter_Card_User_Manual.pdf)
+2. [Mellanox Software Overview - not required for this HOWTO](https://www.mellanox.com/page/software_overview_eth?ssn=qsh5hehe6ok6cdis38qmmktgr2)
+3. [Mellanox Firmware Downloads](https://www.mellanox.com/page/firmware_download?ssn=qsh5hehe6ok6cdis38qmmktgr2)
+4. [Mellanox - Identifying Adapter cards](https://www.mellanox.com/page/firmware_HCA_FW_identification?ssn=qsh5hehe6ok6cdis38qmmktgr2)
+5. [Mellanox ConnectX-3 Firmware Downloads](https://www.mellanox.com/page/firmware_table_ConnectX3ProIB?ssn=qsh5hehe6ok6cdis38qmmktgr2)
+6. [Running multiple iperf3 instances](https://fasterdata.es.net/performance-testing/network-troubleshooting-tools/iperf/multi-stream-iperf3/)
+7. [HP Firmware for HP InfiniBand FDR/EN 10/40Gb Dual Port 544QSFP Adapter: HPE part number 649281-B21](https://support.hpe.com/hpsc/swd/public/detail?swItemId=MTX-6c3269847a3f4623b1ef56f5f5#tab3)
+8. [Mellanox - Performance Tuning for Mellanox Adapters](https://community.mellanox.com/s/article/performance-tuning-for-mellanox-adapters)
+9. [Kernel network stack challenges at increasing speeds - Youtube](https://www.youtube.com/watch?v=3XG9-X777Jo&feature=youtu.be)
+10. [OpenSM](https://furneaux.ca/wiki/OpenSM)
+11. [InfiniBand: An Inexpensive Performance Boost For Your Home Network](https://blog.patshead.com/2016/04/infiniband-an-inexpensive-performance-boost-for-your-home-network.html)
+12. [Red Hat: Configuring the Subnet Manager](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/networking_guide/sec-configuring_the_subnet_manager)
+13. [Mellanox: ConnectX-3 VPI](https://www.mellanox.com/related-docs/prod_adapter_cards/ConnectX3_VPI_Card.pdf)
+14. [Ubuntu 19.04 Linux Inbox Driver User Manual](https://www.mellanox.com/pdf/prod_software/Ubuntu_19_04_Inbox_Driver_User_Manual.pdf)
+15. [HowTo Change Port Type in Mellanox ConnectX-3 Adapter](https://community.mellanox.com/s/article/howto-change-port-type-in-mellanox-connectx-3-adapter)
+16. [Infiniband - Wikipedia](https://en.wikipedia.org/wiki/InfiniBand)
+17. [NFS over Infiniband](https://furneaux.ca/wiki/NFS_over_InfiniBand)
+18. [IP over Infiniband (IPoIB)](https://furneaux.ca/wiki/IPoIB)
+19. [Difference betweeb IPoIB and TCP over Infiniband: Stackoverflow](https://stackoverflow.com/questions/6051832/difference-between-ipoib-and-tcp-over-infiniband)
+20. [Infiniband: Archwiki](https://wiki.archlinux.org/index.php/InfiniBand)
+21. [Mellanox: Installing Mellanox OFED](https://docs.mellanox.com/display/MLNXOFEDv461000/Installing+Mellanox+OFED)
+22. [How to Speed Test Your New Infiniband Card](https://arpnetworks.com/blog/2016/11/07/how-to-speed-test-your-new-infiniband-card.html)
+23. [Mellanox: Linux sysctl tuning](https://community.mellanox.com/s/article/linux-sysctl-tuning)
+
+
+# Search and buying links
+1. [Search for HP 656089-001 Dual-port 40Gbit NIC on ebay.com (US)](https://www.ebay.com/sch/i.html?_from=R40&_trksid=m570.l1313&_nkw=HP+656089-001&_sacat=0)
+2. [Search for Dual-port 40Gbit NICs on ebay.com (US)](https://www.ebay.com/sch/58058/i.html?_geositeid=0&_nkw=%28%22cx3+vpi+dual+40gb%22%2Cmcx354a%2C7046442%2C649281-b21%29+-bracket&_sop=15&_fsrp=1)
+3. [Search for Mellanox MC2206130-001 1-meter QSFP Passive Copper Cable on ebay.com (US)](https://www.ebay.com/sch/i.html?_from=R40&_trksid=m570.l1313&_nkw=Mellanox%2BMC2206130-001&_sacat=0)
+4. [Search for 40 GbE cable QSFP Passive Copper Cable on ebay.com(US)](https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2380057.m570.l1313.TR0.TRC0.A0.H0.X40+GbE+cable+QSFP+Passive+Copper+Cable.TRS1&_nkw=40+GbE+cable+QSFP+Passive+Copper+Cable&_sacat=0)
