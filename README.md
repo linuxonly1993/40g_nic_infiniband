@@ -233,10 +233,10 @@ Permanent HW addr: 00:02:c9:3e:ca:b0
 Slave queue ID: 0
 ```
 
-## Quick Start - Infiniband mode
+# Quick Start - Infiniband mode
 Do the following steps on **BOTH** machines connected by 40Gbit Infiniband cable.
 
-### Package installation
+## Package installation
 ```apt install rdma-core opensm ibutils infiniband-diags```
 
 ### Setup interface
@@ -250,15 +250,15 @@ iface ib0 inet static
 ```
 Change the contents of the file to reflect your network (IP address, netmask, broadcast address). Do **NOT** change the interface name (ib0).
 
-### Connect cable between computers
+## Connect cable between computers
 Do this **AFTER** performing above steps on **BOTH** computers.
 
-### Reboot
+## Reboot
 Your interface (ib0) should be seen, with the right IP address, netmask etc.
 
 If not, use the command ```ifconfig -a``` to see whether interface ```ib0``` was detected at all.
 
-### Troubleshooting steps
+## Troubleshooting steps
 - Use ```ibstat``` to see status of interface(s)
 - ```cat /sys/class/net/ib0/mode``` - should show ```connected``` or ```datagram```
 - Check whether ```opensm``` service is running: ```systemctl status opensm```. Output should resemble the following:
@@ -285,7 +285,7 @@ Dec 30 00:07:32 fili OpenSM[3107]: Exiting SM
 Dec 30 00:07:32 fili OpenSM[3110]: Entering STANDBY state
 ```
 
-## Checking performance
+# Checking performance
 - On both machines, A and B connected by 40Gbit Infiniband cable, having IP addresses IP_A and IP_B on interface ```ib0```respectively, install iperf3: ```sudo apt install iperf3```
 - On machine A start iperf3 in **server** mode: ```iperf3 -B IP_A -i 3 -s``` - replace IP_A with IP address of interface ```ib0``` on Machine A (sudo / root **not** required)
 - On machine B start iperf3 in **client** mode: ```iperf3 -B IP_B -i 3 -t 15 -s IP_A``` - replace IP_A with IP address of interface ```ib0``` on Machine A and replace IP_B with IP address of interface ```ib0``` on machine B (sudo / root **not** required)
@@ -308,8 +308,8 @@ Connecting to host 10.30.0.1, port 5201
 iperf Done.
 ```
 
-## Troubleshooting and improving performance
-### Identify your card
+# Troubleshooting and improving performance
+## Identify your card
 ```lspci | grep Mellanox```
 
 Output will look like
@@ -320,7 +320,7 @@ Output will look like
 - **MT27500** is Mellanox part number
 - **ConnectX-3** indicates card **supports** PCI-Express 3 - actual PCI-Express version also depends on PCI-Express capabilities of your motherboard
 
-### Get additional details on your card
+## Get additional details on your card
 Use *domain-bus-device* number obtained above
 
 ```lspci -v -s 81:00.0```
@@ -340,7 +340,7 @@ Output will look like:
 ```
 ***Subsystem: Hewlett-Packard Company InfiniBand FDR/EN 10/40Gb Dual Port 544QSFP Adapter*** gives further OEM details
 
-### Get current PCI-Express version and width used
+## Get current PCI-Express version and width used
 Use *domain-bus-device* number obtained above
 
 ```sudo lspci -vv -s 81:00.0 | grep LnkSta:```
@@ -352,7 +352,7 @@ Output will look like:
 - **Width x8** : indicates logical width is x8 (8 lanes)
 
 
-### PCI-Express speeds and maximum possible bandwidth for network link
+## PCI-Express speeds and maximum possible bandwidth for network link
 PCI-E version | Per lane GT/sec | Per lane MBytes/sec
 ------------------- | ------------- | -------------------
 1.x | 2.5 GT/sec | 250 MBytes/sec
@@ -380,12 +380,12 @@ Notes:
 - Logical width will never be **larger** than physical width
 - Logical width will never be **larger** than actual width of PCI-Express device lane width (x8 in this case)
 
-### Limiting factors for maximum bandwidth of network link
+## Limiting factors for maximum bandwidth of network link
 - PCI-Express version
 - Logical slot width - may depend on configurable settings in the BIOS for your motherboard
 - Maximum bandwidth for network link will be **LESSER** of maximum bandwidth for each of the connected machines as explored above
 
-### sysctl settings for TCP/IP stack
+## sysctl settings for TCP/IP stack
 Put ```etc/sysctl.d/60-infiniband.conf``` under ```/etc/sysctl.d``` and **reboot**
 
 Contents of ```etc/sysctl.d/60-infiniband.conf```
@@ -409,7 +409,7 @@ net.ipv4.tcp_rmem=4096 87380 4194304
 net.ipv4.tcp_wmem=4096 65536 4194304
 ```
 
-### Interface connected state and MTU
+## Interface connected state and MTU
 Only applicable to using Infiniband mode
 
 - Put ```etc/systemd/system/setup_ib0.service``` under ```etc/systemd/system/```
@@ -428,13 +428,13 @@ ExecStart=/bin/echo connected > /sys/class/net/ib0/mode
 ExecStart=/sbin/ifconfig ib0 mtu 65520
 ```
 
-### Run iperf3 with larger number of threads (software bottleneck in iperf3)
+## Run iperf3 with larger number of threads (software bottleneck in iperf3)
 - On machine A start iperf3 in **server** mode: ```iperf3 -B IP_A -i 3 -P2 -s``` - replace IP_A with IP address of interface ```ib0``` on Machine A (sudo / root **not** required)
 - On machine B start iperf3 in **client** mode: ```iperf3 -B IP_B -i 3 -t 15 -P2 -s IP_A``` - replace IP_A with IP address of interface ```ib0``` on Machine A and replace IP_B with IP address of interface ```ib0``` on machine B (sudo / root **not** required)
 
 On each side, try ```-P2```, ```-P4``` and ```-P8``` to see what extracts the maximum bandwidth from the link. For me I got the maximum with ```-P4```.
 
-### Run multiple instances of iperf3
+## Run multiple instances of iperf3
 On each machine start iperf3 (in server and client modes respectively) adding the **```-p <port_num>```** option to choose a port different from the iperf3 default **5201**
 
 # Background
