@@ -141,7 +141,7 @@ ens5: flags=4098<BROADCAST,MULTICAST>  mtu 1500
 
 The ```ens5``` and ```ens5p1``` interface names may be different
 
-Edit ```/etc/udev/rules.d/70-persistent-net.rules``` and add the following lines
+Create a file named ```/etc/udev/rules.d/70-40g-nic.rules``` containing the following lines
 
 ```
 # Mellanox ConnectX-3 HP 649281-B21 IB FDR/EN 10/40Gb 2P 544QSFP Adapter 656089-001
