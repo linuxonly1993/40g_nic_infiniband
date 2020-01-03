@@ -16,9 +16,6 @@ Table of Contents
 * [Troubleshooting steps](#troubleshooting-steps)
 * [Checking performance](#checking-performance)
 * [Troubleshooting and improving performance](#troubleshooting-and-improving-performance)
-* [Background](#background)
-* [Links](#links)
-* [Buying Links](#buying-links)
 
 ToC created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 
@@ -462,17 +459,3 @@ On each side, try ```-P2```, ```-P4``` and ```-P8``` to see what extracts the ma
 
 ## Run multiple instances of iperf3
 On each machine start iperf3 (in server and client modes respectively) adding the **```-p <port_num>```** option to choose a port different from the iperf3 default **5201**
-
-# Background
-
-< Fill in here >
-
-# Links
-1. ABC
-1. DEF
-
-# Buying Links
-1. ABC
-1. DEF
-
-
