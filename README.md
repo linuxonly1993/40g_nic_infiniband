@@ -494,3 +494,6 @@ On each machine start iperf3 (in server and client modes respectively) adding th
 2. [Search for Dual-port 40Gbit NICs on ebay.com (US)](https://www.ebay.com/sch/58058/i.html?_geositeid=0&_nkw=%28%22cx3+vpi+dual+40gb%22%2Cmcx354a%2C7046442%2C649281-b21%29+-bracket&_sop=15&_fsrp=1)
 3. [Search for Mellanox MC2206130-001 1-meter QSFP Passive Copper Cable on ebay.com (US)](https://www.ebay.com/sch/i.html?_from=R40&_trksid=m570.l1313&_nkw=Mellanox%2BMC2206130-001&_sacat=0)
 4. [Search for 40 GbE cable QSFP Passive Copper Cable on ebay.com(US)](https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2380057.m570.l1313.TR0.TRC0.A0.H0.X40+GbE+cable+QSFP+Passive+Copper+Cable.TRS1&_nkw=40+GbE+cable+QSFP+Passive+Copper+Cable&_sacat=0)
+5. [Search for HP 764285-B21 Dual-port 10/40 GBit QSFP ConnectX-3 Adapter on ebay.com (US)](https://www.ebay.com/sch/i.html?_from=R40&_nkw=HP%20764285-B21&_sacat=0&rt=nc&_udhi=20)
+6. [Search for infiniband 40gb card on ebay.com (US)](https://www.ebay.com/sch/i.html?LH_CAds=&_ex_kw=&_fpos=&_fspt=1&_mPrRngCbx=1&_nkw=infiniband+40gb+card&_sacat=58058&_sadis=&_sop=15&_udhi=20&_udlo=5&_fosrp=1)
+7. [ Search for MC2207130-001 1-meter QSFP Passive Copper Cable under $30 on ebay.com (US)](https://www.ebay.com/sch/i.html?_from=R40&_nkw=Mellanox+MC2207130-001&_sacat=0&_sop=15&_udhi=30&LH_BIN=1&rt=nc&LH_PrefLoc=1)
