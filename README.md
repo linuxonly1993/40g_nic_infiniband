@@ -409,7 +409,9 @@ net.ipv4.tcp_rmem=4096 87380 4194304
 net.ipv4.tcp_wmem=4096 65536 4194304
 ```
 
-### interface connected state and MTU
+### Interface connected state and MTU
+Only applicable to using Infiniband mode
+
 - Put ```etc/systemd/system/setup_ib0.service``` under ```etc/systemd/system/```
 - Run ```systemctl enable setup_ib0.service``` and **reboot**
 
@@ -434,18 +436,6 @@ On each side, try ```-P2```, ```-P4``` and ```-P8``` to see what extracts the ma
 
 ### Run multiple instances of iperf3
 On each machine start iperf3 (in server and client modes respectively) adding the **```-p <port_num>```** option to choose a port different from the iperf3 default **5201**
-
-## Questions and Answers
-### Why can't I see the full 56 GBit/sec or 60 GBit/sec bandwidth?
-- IP over Infiniband limitations
-- Number and power of CPUs
-- Available RAM
-- Limitations of the measurement tool (```iperf3```)
-
-### Both my Mellanox cards have TWO 40 GBit ports, can I bond them to get double the bandwidth?
-No - Linux kernel bonding only supports Level 1 protocols, and Infiniband is not a Level 1 protocol.
-
-You are also limited by the maximum bandwidth supported by your PCI-Express slot.
 
 # Background
 
